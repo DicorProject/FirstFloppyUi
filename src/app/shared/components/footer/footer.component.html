@@ -21,7 +21,7 @@
                       <div class="col-md-6">
                         <ul>
                           <li *ngFor="let item of column" style="font-size: 11px;">
-                            <a [href]="item.url" class="text-decoration-none text-white" [attr.target]="section.parameterDetail === 'Social Media' ? '_blank' : null">
+                            <a [href]="sanitizeUrl(item.url)" class="text-decoration-none text-white" [attr.target]="section.parameterDetail === 'Social Media' ? '_blank' : null">
                               <ng-container *ngIf="section.parameterDetail === 'Location'">
                                 <img *ngIf="item.tittle.includes('.com')" src="Icons/mail.svg" alt="Mail" style="height: 13px; width: 13px;">
                                 <img *ngIf="item.tittle.includes('+91') || isValidMobileNumber(item.tittle)" src="Icons/phone.svg" alt="Phone" style="height: 13px; width: 13px;">

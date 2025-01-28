@@ -167,37 +167,77 @@ this.homeService.triggerFunction$.subscribe((data:any) => {
   }
  
 
+  // getCurrentLocation(closeModal?: boolean) {
+  //   if (navigator.geolocation) {
+  //     const options = {
+  //       enableHighAccuracy: true, // Use high accuracy for better location results
+  //       timeout: 10000, // Set a timeout for fetching the location (optional)
+  //       maximumAge: 0 // Prevent caching of the location
+  //     };
+  
+  //     navigator.geolocation.getCurrentPosition((position) => {
+  //       const lat = position.coords.latitude;
+  //       const lng = position.coords.longitude;
+  //       this.latitude = lat;
+  //       this.longitude = lng;
+        
+  //       // Fetch the exact location (address) using Google Geocoding API
+  //       this.getExactLocation(lat, lng);
+
+  //       // Trigger the location change notification
+  //       this.services.notifyLocationChange();
+  //       sessionStorage.setItem('latitude', this.latitude);
+  //       sessionStorage.setItem('longitude',this.longitude);
+
+  //       // Close the dialog if the flag is true
+  //       if (closeModal) {
+  //         this.showLocationPopup = false // Close the dialog
+  //       }
+  //     }, (error) => {
+  //       console.error('Error fetching location: ', error);
+  //     }, options);
+  //   } else {
+  //     console.log('Geolocation is not supported by this browser.');
+  //   }
+  // }
+  
   getCurrentLocation(closeModal?: boolean) {
     if (navigator.geolocation) {
       const options = {
-        enableHighAccuracy: true, // Use high accuracy for better location results
-        timeout: 10000, // Set a timeout for fetching the location (optional)
-        maximumAge: 0 // Prevent caching of the location
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
       };
   
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        this.latitude = lat;
-        this.longitude = lng;
-        
-        // Fetch the exact location (address) using Google Geocoding API
-        this.getExactLocation(lat, lng);
-
-        // Trigger the location change notification
-        this.services.notifyLocationChange();
-        sessionStorage.setItem('latitude', this.latitude);
-        sessionStorage.setItem('longitude',this.longitude);
-
-        // Close the dialog if the flag is true
-        if (closeModal) {
-          this.showLocationPopup = false // Close the dialog
-        }
-      }, (error) => {
-        console.error('Error fetching location: ', error);
-      }, options);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+  
+          this.latitude = lat;
+          this.longitude = lng;
+  
+          // Fetch exact location
+          this.getExactLocation(lat, lng);
+  
+          // Trigger the location change notification
+          this.services.notifyLocationChange();
+  
+          sessionStorage.setItem('latitude', this.latitude.toString());
+          sessionStorage.setItem('longitude', this.longitude.toString());
+  
+          // Handle the optional closeModal argument
+          if (closeModal) {
+            this.showLocationPopup = false;
+          }
+        },
+        (error) => {
+          console.error('Error fetching location: ', error);
+        },
+        options
+      );
     } else {
-      console.log('Geolocation is not supported by this browser.');
+      console.error('Geolocation is not supported by this browser.');
     }
   }
   

@@ -192,7 +192,6 @@ thirdCategory!:SubCategories
       this.homeService.getHomeDetails().subscribe((res: any) => {
         // Treat res.data as an object with dynamic keys
         this.homeBannerData = res.data as { [key: string]: any };
-      console.log( this.homeBannerData,"195")
         // Accessing the Top section and sorting
         const topData = this.homeBannerData['Top'];
         if (topData) {
@@ -274,7 +273,6 @@ thirdCategory!:SubCategories
   }
 
     goCategory(subcategory: any, category:any) {
-      console.log(subcategory, category,"271")
       localStorage.setItem('myState', JSON.stringify(true));
 
       this.router.navigate([`${category.categoryseourl}`],

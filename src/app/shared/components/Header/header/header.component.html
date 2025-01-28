@@ -13,7 +13,8 @@
      <span>
       
     </span>
-      <span class="header_needhelpText">Call Us : 91306 91306</span>
+      <!-- <span class="header_needhelpText">Call Us : 9130691306</span> -->
+      <span class="header_needhelpText"><a href="tel:9130691306" class="header_needhelpText">Call Us : 9130691306</a></span>
     </div>
   </div>
 </div>
@@ -81,7 +82,7 @@
 <div id="locationModal" class="modal" tabindex="-1" role="dialog" *ngIf="showLocationPopup" (click)="onBackdropClick($event)">
   <div class="modal-dialog" role="document" (click)="$event.stopPropagation()">
     <div class="modal-content">
-      <div class="modal-body">
+      <!-- <div class="modal-body">
         <div class="search-bar">
           <i class="fa fa-search search-icon"></i>
           <input
@@ -101,8 +102,33 @@
             <i class="fa-solid fa-location-dot"></i> {{ prediction.description }}
           </option>
         </select>
+      </div> -->
+      
+      <div class="modal-body">
+        <div class="search-bar">
+          <mat-form-field class="full-width custom-no-underline">
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              matInput
+              [(ngModel)]="searchInput"
+              (input)="onInputChange()"
+              [matAutocomplete]="auto"
+              placeholder="Search for your location"
+              class="autocomplete-input location-auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let prediction of predictions" [value]="prediction.description" (click)="selectPrediction(prediction)">
+                <i class="fa-solid fa-location-dot"></i> {{ prediction.description }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <button (click)="getCurrentLocation(true)" class="current-location-btn">
+            <i class="fa-solid fa-location-dot"></i> Use current location
+          </button>
+        </div>
       </div>
       
+
     </div>
   </div>
 </div>

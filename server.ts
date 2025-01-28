@@ -19,6 +19,42 @@ export function app(): express.Express {
     maxAge: '1d', // Cache static files for 1 day
   }));
 
+  server.get('*', (req, res, next) => {
+    // Handle redirection
+    const redirects = [
+      { old: '/Laptop', new: '/itrental' },
+      { old: '/desktop', new: '/itrental' },
+      { old: '/server', new: '/itrental' },
+      { old: '/printer', new: '/itrental' },
+      { old: '/networking', new: '/itrental' },
+      { old: '/other', new: '/cctv' },
+      { old: '/LaptopPCRepair', new: '/itrental' },
+      { old: '/projector', new: '/itrental' },
+      { old: '/HomeAppliance', new: '/washingmachinerepair' },
+      { old: '/kitchenappliance', new: '/refrigeratorrepair' },
+      { old: '/aconrent', new: '/acrepairandservice' },
+      { old: '/acrepairservice', new: '/acrepairandservice' },
+      { old: '/SofaCleaning', new: '/cleaningservice' },
+      { old: '/pestcontrol', new: '/pestcontrol' },
+      { old: '/homecleaning', new: '/cleaningservice' },
+      { old: '/watertankcleaner', new: '/cleaningservice' },
+      { old: '/officechaircleaningservices', new: '/cleaningservice' },
+      { old: '/bathroomcleaning', new: '/cleaningservice' },
+      { old: '/Bed', new: '/' }
+    ];
+  
+    // Match the URL with the redirection rules
+    const redirect = redirects.find(r => req.url.includes(r.old));
+    if (redirect) {
+      res.redirect(301, redirect.new);
+      return;
+    }
+  
+    // Continue to the Universal engine for rendering
+    next();
+  });
+  
+
   // All API routes (Example: Adjust if you have specific APIs)
   server.get('/api/**', (req, res) => {
     res.status(404).json({ message: 'API endpoint not found.' });

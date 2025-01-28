@@ -2,13 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>FirstFloppyRentalApp</title>
+  <!-- <title>FirstFloppyRentalApp</title> -->
+  <title>First Floppy Find Service Near You | Home service & Rental</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@angular/material@latest/prebuilt-themes/indigo-pink.css" rel="stylesheet">
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiNuqXGMSShC6VzS2kVFo043gL5RyOq88&libraries=places"></script> -->
+
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="First Floppy, a top Home Service at Doorstep company in India, specializes in Home Service and IT rental services. We provide AC Repair, Washing Machine repair, Fridge Repair, Geyser repair, laptops, desktops, pest control, Cleaning Service and more at affordable prices." />
+  <meta name="keywords" content="home services, IT rental, AC repair, washing machine repair, fridge repair, pest control, cleaning service">
+
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARIDLGBcFWWC5HltY1_t5iZcXuoXz08bo&libraries=places"></script>
 
   <!-- Include Cashfree Checkout SDK -->
@@ -16,6 +22,147 @@
    <!-- Cashfree SDK -->
    <!-- <script src="https://sdk.cashfree.com/js/core/2.0.0-beta.3/cashfree.core.min.js"></script> -->
    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+<!-- Schema.org Structured Data -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "First Floppy",
+    "alternateName": "First Floppy",
+    "url": "https://www.firstfloppy.com/",
+    "logo": "https://www.firstfloppy.com/images/logo/logo.png",
+    "sameAs": [
+      "https://www.facebook.com/Ratecompre",
+      "https://www.instagram.com/firstfloppy_india/",
+      "https://x.com/firstfloppy_c",
+      "https://www.youtube.com/@firstfloppy9323",
+      "https://www.linkedin.com/company/35563837/admin/dashboard/"
+    ]
+  }
+</script>
+
+<script type="application/ld+json">
+  "sameAs": [
+    "https://www.facebook.com/Ratecompre",
+    "https://www.instagram.com/firstfloppy_india/",
+    "https://x.com/firstfloppy_c",
+    "https://www.youtube.com/@firstfloppy9323"
+    "https://www.linkedin.com/company/35563837/admin/dashboard/"
+  ] 
+</script>
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "WebSite",
+    "name": "First Floppy",
+    "url": "https://www.firstfloppy.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.firstfloppy.com/{search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+</script>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/", 
+    "@type": "BreadcrumbList", 
+    "itemListElement": [
+      {
+        "@type": "ListItem", 
+        "position": 1, 
+        "name": "Home",
+        "item": "https://www.firstfloppy.com/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2, 
+        "name": "About",
+        "item": "https://www.firstfloppy.com/about/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 3, 
+        "name": "Services",
+        "item": "https://www.firstfloppy.com/services/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 4, 
+        "name": "AC Repair Service",
+        "item": "https://www.firstfloppy.com/acrepairandservice/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 5, 
+        "name": "Geyser Repair and Service",
+        "item": "https://www.firstfloppy.com/geyserrepairandservice/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 6, 
+        "name": "Washing Machine Repair",
+        "item": "https://www.firstfloppy.com/washingmachinerepair/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 7, 
+        "name": "Refrigerator Repair",
+        "item": "https://www.firstfloppy.com/refrigeratorrepair/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 8, 
+        "name": "Cleaning Service",
+        "item": "https://www.firstfloppy.com/cleaningservice/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 9, 
+        "name": "Pest Control",
+        "item": "https://www.firstfloppy.com/pestcontrol/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 10, 
+        "name": "IT Rental",
+        "item": "https://www.firstfloppy.com/itrental/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 11, 
+        "name": "CCTV",
+        "item": "https://www.firstfloppy.com/cctv/"  
+      },
+      {
+        "@type": "ListItem", 
+        "position": 12, 
+        "name": "Blog",
+        "item": "https://www.firstfloppy.com/blog/"  
+      }
+    ]
+  }
+</script>
+
+<!-- Google Tag Manager -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SRKL4G2TSR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SRKL4G2TSR');
+</script>
+
+<!-- Additional Google Tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0WVF7EC87L"></script>
+<script>
+  gtag('config', 'G-0WVF7EC87L');
+</script>
+
 </head>
 <body>
   <app-root></app-root>

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from '../../../modules/login/Components/login/login.component';
 import { SharedService } from '../../services/shared.service';
 import { isPlatformBrowser } from '@angular/common';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-footer',
@@ -16,7 +17,7 @@ export class FooterComponent implements OnInit{
   readonly dialog = inject(MatDialog)
   isBrowser!: boolean;
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object){ 
+  constructor(@Inject(PLATFORM_ID) platformId: Object, private sanitizer: DomSanitizer){ 
     this.isBrowser = isPlatformBrowser(platformId);}
   
   ngOnInit(): void {
@@ -65,13 +66,15 @@ openPartnerLink() {
 }
 
 isValidMobileNumber(mobile: string): boolean {
-  console.log(mobile, "mobile (before cleaning)");
   // Remove spaces or non-numeric characters from the input
   const cleanedMobile = mobile.replace(/\D/g, ''); // Keeps only digits
-  console.log(cleanedMobile, "mobile (after cleaning)");
 
   // Check if the cleaned input contains exactly 10 digits
   const mobileNumberPattern = /^\d{10}$/;
   return mobileNumberPattern.test(cleanedMobile);
+}
+
+sanitizeUrl(url: string): SafeUrl {
+  return this.sanitizer.bypassSecurityTrustUrl(url);
 }
 }

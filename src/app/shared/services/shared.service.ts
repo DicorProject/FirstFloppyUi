@@ -45,8 +45,9 @@ export class SharedService {
     const httpOptions = {
       headers: headers,
     };
+    const url = `${environment.ApiBaseUrl}Footer/fetch-listData-footer?timestamp=${new Date().getTime()}`
     return this.http
-      .get(this.url + 'Footer/fetch-listData-footer', httpOptions)
+      .get(url, httpOptions)
       .pipe(
         map((res) => {
           return res;
