@@ -30,7 +30,9 @@ export class BlogDetailComponent implements OnInit {
     this.isBrowser = isPlatformBrowser(platformId);
     this.route.paramMap.subscribe(params => {
       this.selectedBlog = params.get('id'); // 'maingroupid' is the name you used in the route
+      console.log(this.selectedBlog,"selectedBlog")
     });
+    this.getBlogList();
     this.commentForm = fb.group({
       comment: ["", [Validators.required, noWhitespaceValidator(), Validators.maxLength(this.maxCommentLength)]],
       name: ["", [Validators.required, noWhitespaceValidator(), Validators.pattern('^[a-zA-Z\\s]*$')]],
@@ -44,14 +46,13 @@ export class BlogDetailComponent implements OnInit {
   blogDetail:any;
   ngOnInit(){
     this.viewportScroller.scrollToPosition([0, 0]); // Scroll to the top of the page
-    this.getBlogDetail();
+    
     this.getCategoryList();
   }
 
   getBlogDetail(){
-this.blogService.getBlogDetails(this.selectedBlog).subscribe((response:any)=>{
+this.blogService.getBlogDetails(this.selectedBlogDetails.id).subscribe((response:any)=>{
   this.blogDetail = response.data
-  this.getReviewsByBlogId(this.blogDetail.blogId)
   if(this.isBrowser){
   const userId = localStorage.getItem("userId");
   
@@ -93,7 +94,7 @@ this.serviceDetail.getCategoryList().subscribe((response:any)=>{
     this.commentForm?.markAllAsTouched();
     if(this.commentForm?.invalid)return;
     const blogReviewData = {
-      blogid: this.selectedBlog, // Assuming the blog ID is available from blogDetail
+      blogid: this.selectedBlogDetails.id, // Assuming the blog ID is available from blogDetail
       userId: localStorage.getItem('userId'),
       name: this.commentForm?.get("name")?.value,
       email: this.commentForm?.get("email")?.value,
@@ -180,6 +181,21 @@ this.blogReview = response.data;
    // Getter to check if "Load More" button should be visible
    get shouldShowLoadMore() {
     return this.displayedReviewsCount < this.blogReview.length;
+  }
+
+  selectedBlogDetails: any;
+  getBlogList() {
+    this.blogService.getBlogList(0, 0).subscribe((response: any) => {
+
+      // Find the blog by matching the 'tittle' (title) from the route parameter
+      this.selectedBlogDetails = response.data.blogs.find((blog:any) => blog.tittle.replace(/\s+/g, '-') === this.selectedBlog);
+      if (this.selectedBlogDetails) {
+        // If a blog is found, get the details
+        this.getBlogDetail();
+        this.getReviewsByBlogId(this.selectedBlogDetails.id)
+      }
+
+    });
   }
 }
 

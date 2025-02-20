@@ -27,7 +27,6 @@ import { LoaderInterceptor } from "./shared/services/loader-intercepter.service"
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     provideHttpClient(),
-    provideClientHydration()
   ],
   bootstrap: [AppComponent],
 })

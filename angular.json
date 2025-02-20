@@ -41,6 +41,11 @@
                 "glob": "web.config",
                 "input": "src",
                 "output": "./"
+              },
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "./"
               }
             ],
             "styles": [

@@ -334,6 +334,10 @@ if (localIndex !== -1) {
     }
     if(this.isBrowser){
     const userId = Number(localStorage.getItem('userId'));
+    if(userId == 0){
+      this.toastr.warning('Please login to apply coupon code.');
+      return;
+    }
     // const couponId = Number(couponCode);
     const totalPrice = this.initialAmountToCheckout;
   
@@ -419,13 +423,32 @@ extractAddressComponents(addressComponents: any): void {
   // Iterate through the address components array returned by the Google API
   const parts = addressComponents.split(',').map((part:any) => part.trim()); // Split the address by commas and trim whitespace
 
+  // if (parts.length >= 5) {
+  //   console.log(parts, "Address Components");
+  //   this.address = parts[0];           // Street address or location code (e.g., "35P5+8M2")
+  //   this.city = parts[2];               // City (e.g., "Bilaspur")
+  //   this.state = parts[3].split(' ')[0]; // State (e.g., "Chhattisgarh")
+  //   this.zipCode = parts[3].split(' ')[1]; // Zip code (e.g., "495001")
+  //   this.country = parts[4];            // Country (e.g., "India")
+  // }
+
   if (parts.length >= 5) {
-    this.address = parts[0];           // Street address or location code (e.g., "35P5+8M2")
-    this.city = parts[2];               // City (e.g., "Bilaspur")
-    this.state = parts[3].split(' ')[0]; // State (e.g., "Chhattisgarh")
-    this.zipCode = parts[3].split(' ')[1]; // Zip code (e.g., "495001")
-    this.country = parts[4];            // Country (e.g., "India")
-  }
+    console.log(parts, "Address Components");
+    this.address = parts[0];           // Street address or location code (e.g., "23/2")
+    this.city = parts[3];               // City (e.g., "Bilaspur")
+    
+    // Ensure parts[4] exists before splitting
+    if (parts[4].includes(' ')) {
+        const stateZip = parts[4].split(' '); // ["Chhattisgarh", "495004"]
+        this.state = stateZip[0];  // "Chhattisgarh"
+        this.zipCode = stateZip[1]; // "495004"
+    } else {
+        this.state = parts[4];  // If no zip code is present
+        this.zipCode = '';       // Handle missing zip code
+    }
+
+    this.country = parts[5] || '';  // Ensure country is assigned correctly (e.g., "India")
+}
 }
 
 // Example usage: Call the function to populate variables
@@ -477,6 +500,7 @@ placeInquiry(cartItems: any[]) {
       //   "longitude": "string"
       // }
       // Pass all cart items to the service, which will extract the item IDs
+      console.log(inquiryPayload, "Inquiry Payload");
       this.cartService.placeEnquiry(inquiryPayload).subscribe(
         (response: any) => {
           console.log(response, "390 - API Response");
@@ -549,6 +573,7 @@ placeInquiry(cartItems: any[]) {
 }
 
 getCurrentLocation() {
+  if(this.isBrowser){
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
       const lat = position.coords.latitude;
@@ -561,6 +586,7 @@ this.longitude = position.coords.longitude;
   } else {
     console.log('Geolocation is not supported by this browser.');
   }
+}
 }
   
 }

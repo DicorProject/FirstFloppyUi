@@ -90,7 +90,7 @@ this.homeService.triggerFunction$.subscribe((data:any) => {
       toggle: false
     });
     this.cartService.cartLength.subscribe((val)=>{
-      this.cartLength = val || length;
+      this.cartLength = val || 0;
     })
     if(localStorage.getItem('myCartItem') && !localStorage.getItem('userId')){
       const cartItems = localStorage.getItem('myCartItem');
@@ -154,90 +154,60 @@ this.homeService.triggerFunction$.subscribe((data:any) => {
     });
   }
 
-  selectPrediction(event: any) {
-    this.address = event.target.value;
+  
+  selectPrediction(prediction: any) {
+    this.address = prediction?.description; // Access the description property
     this.city = this.extractCity(this.address);
     sessionStorage.setItem('city', this.city);
     sessionStorage.setItem('address', this.address);
-    this.findCoordinates(this.address)
-
-    this.searchInput=''
+    this.findCoordinates(this.address);
+  
+    this.searchInput = '';
     this.predictions = [];
-    this.closeLocationPopup()
+  
+    this.closeLocationPopup(); // Ensure this closes the modal
   }
- 
 
-  // getCurrentLocation(closeModal?: boolean) {
-  //   if (navigator.geolocation) {
-  //     const options = {
-  //       enableHighAccuracy: true, // Use high accuracy for better location results
-  //       timeout: 10000, // Set a timeout for fetching the location (optional)
-  //       maximumAge: 0 // Prevent caching of the location
-  //     };
-  
-  //     navigator.geolocation.getCurrentPosition((position) => {
-  //       const lat = position.coords.latitude;
-  //       const lng = position.coords.longitude;
-  //       this.latitude = lat;
-  //       this.longitude = lng;
-        
-  //       // Fetch the exact location (address) using Google Geocoding API
-  //       this.getExactLocation(lat, lng);
+  closeLocationPopup() {
+    // Implement modal close logic here
+    const modalElement = document.querySelector('.modal-body') as HTMLElement;
+    if (modalElement) {
+      modalElement.style.display = 'none'; // Example: Hide the modal
+    }
+    this.showLocationPopup = false;
+  }
 
-  //       // Trigger the location change notification
-  //       this.services.notifyLocationChange();
-  //       sessionStorage.setItem('latitude', this.latitude);
-  //       sessionStorage.setItem('longitude',this.longitude);
-
-  //       // Close the dialog if the flag is true
-  //       if (closeModal) {
-  //         this.showLocationPopup = false // Close the dialog
-  //       }
-  //     }, (error) => {
-  //       console.error('Error fetching location: ', error);
-  //     }, options);
-  //   } else {
-  //     console.log('Geolocation is not supported by this browser.');
-  //   }
-  // }
-  
   getCurrentLocation(closeModal?: boolean) {
     if (navigator.geolocation) {
       const options = {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
+        enableHighAccuracy: true, // Use high accuracy for better location results
+        timeout: 10000, // Set a timeout for fetching the location (optional)
+        maximumAge: 0 // Prevent caching of the location
       };
   
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-  
-          this.latitude = lat;
-          this.longitude = lng;
-  
-          // Fetch exact location
-          this.getExactLocation(lat, lng);
-  
-          // Trigger the location change notification
-          this.services.notifyLocationChange();
-  
-          sessionStorage.setItem('latitude', this.latitude.toString());
-          sessionStorage.setItem('longitude', this.longitude.toString());
-  
-          // Handle the optional closeModal argument
-          if (closeModal) {
-            this.showLocationPopup = false;
-          }
-        },
-        (error) => {
-          console.error('Error fetching location: ', error);
-        },
-        options
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        this.latitude = lat;
+        this.longitude = lng;
+        
+        // Fetch the exact location (address) using Google Geocoding API
+        this.getExactLocation(lat, lng);
+
+        // Trigger the location change notification
+        this.services.notifyLocationChange();
+        sessionStorage.setItem('latitude', this.latitude);
+        sessionStorage.setItem('longitude',this.longitude);
+
+        // Close the dialog if the flag is true
+        if (closeModal) {
+          this.showLocationPopup = false // Close the dialog
+        }
+      }, (error) => {
+        console.error('Error fetching location: ', error);
+      }, options);
     } else {
-      console.error('Geolocation is not supported by this browser.');
+      console.log('Geolocation is not supported by this browser.');
     }
   }
   
@@ -319,9 +289,9 @@ this.homeService.triggerFunction$.subscribe((data:any) => {
     this.showLocationPopup = true;
   }
 
-  closeLocationPopup() {
-    this.showLocationPopup = false;
-  }
+  // closeLocationPopup() {
+  //   this.showLocationPopup = false;
+  // }
 
   onBackdropClick(event: MouseEvent): void {
     // Check if the click is outside the modal content

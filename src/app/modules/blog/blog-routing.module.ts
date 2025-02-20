@@ -8,8 +8,12 @@ const routes: Routes = [
     path: '',
     component: BlogComponent,
   },
+  // {
+  //   path: `blog-detail/:id`,
+  //   component: BlogDetailComponent,
+  // },
   {
-    path: `blog-detail/:id`,
+    path: `:id`,
     component: BlogDetailComponent,
   }
 ];

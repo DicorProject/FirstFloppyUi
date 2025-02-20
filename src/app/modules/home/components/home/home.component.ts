@@ -10,8 +10,9 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Item, SubCategories } from '../../_models/home.model';
 import { FormControl } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Meta } from '@angular/platform-browser';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -136,7 +137,7 @@ thirdCategory!:SubCategories
   filteredSubgroupsName: Observable<any[]> = new Observable();
   placesService!: google.maps.places.PlacesService;
   isBrowser!: boolean;
-  constructor(private homeService: HomeService, public dialog: MatDialog, private service:ServicesDetailService,private scrollService:ScrollService, private router:Router,private http: HttpClient, @Inject(PLATFORM_ID) platformId: Object, private cdr: ChangeDetectorRef){
+  constructor(private homeService: HomeService, public dialog: MatDialog, private service:ServicesDetailService,private scrollService:ScrollService, private router:Router,private http: HttpClient, @Inject(PLATFORM_ID) platformId: Object, private cdr: ChangeDetectorRef, private meta: Meta, @Inject(DOCUMENT) private dom:any){
     // this.initializeLocations();
     this.isBrowser = isPlatformBrowser(platformId);
     if(this.isBrowser){
@@ -163,9 +164,42 @@ thirdCategory!:SubCategories
       this.serviceDataList = this.serviceDataList?.filter((iterable:any)=> iterable?.status === 1);
     })
     this.fetchSubCategories()
+
+    // Add the canonical URL
+    this.meta.updateTag({
+      name: "canonical",
+      content: "https://www.firstfloppy.com/"
+    });
+    this.createCanonicalLink()
   }
   }
 
+  createCanonicalLink() {
+    let canURL = 'https://www.firstfloppy.com/';
+    let link: HTMLLinkElement = this.dom.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    this.dom.head.appendChild(link);
+    link.setAttribute('href', canURL);
+  }
+
+  // createCanonicalLink() {
+  //   const canURL = 'https://www.firstfloppy.com/';
+    
+  //   let existingLink: HTMLLinkElement | null = document.querySelector("link[rel='canonical']");
+    
+  //   if (existingLink) {
+  //     // If a canonical link already exists, update it
+  //     existingLink.setAttribute('href', canURL);
+  //   } else {
+  //     // Otherwise, create and append a new canonical link
+  //     let link: HTMLLinkElement = document.createElement('link');
+  //     link.setAttribute('rel', 'canonical');
+  //     link.setAttribute('href', canURL);
+  //     document.head.appendChild(link);
+  //   }
+
+  //   console.log("Canonical link set:", canURL);
+  // }
 
     onPrevClick() {
         this.owlElement.nativeElement.trigger('prev.owl.carousel');; // Move to previous slide

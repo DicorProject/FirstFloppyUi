@@ -8,7 +8,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { BehaviorSubject, Subscription, take } from 'rxjs';
 import { HomeService } from '../../../home/services/home.service';
 import { SharedService } from '../../../../shared/services/shared.service';
-import { isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
@@ -79,7 +79,7 @@ categorySeoUrl:any
   paginator$ = new BehaviorSubject<{pageIndex:number,pageSize:number}|null>({pageIndex:0,pageSize:12})
   myState: boolean | undefined;
   locationSubscription$!:Subscription;
-  constructor(private fb: FormBuilder, private router: Router, private service:ServicesDetailService, private homeService:HomeService, private sharedService:SharedService, private route:ActivatedRoute, @Inject(PLATFORM_ID) platformId: Object, private viewportScroller: ViewportScroller, private metaService: Meta,
+  constructor(private fb: FormBuilder, private router: Router, private service:ServicesDetailService, private homeService:HomeService, private sharedService:SharedService, private route:ActivatedRoute, @Inject(PLATFORM_ID) platformId: Object, private viewportScroller: ViewportScroller, private metaService: Meta, @Inject(DOCUMENT) private dom:any,
   private titleService: Title) {
     this.isBrowser = isPlatformBrowser(platformId);
     if(this.isBrowser){
@@ -121,8 +121,12 @@ this.route.queryParams.subscribe(params => {
       : +this.CategoryId;
   }
   ngOnInit(){
-    this.sharedService.updateBreadcrumb('/services'+this.router.url);
     if(this.isBrowser){
+      // this.viewportScroller.scrollToPosition([0, 0])
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scrolling to top
+      }, 100);
+      this.sharedService.updateBreadcrumb('/services'+this.router.url);
   // Subscribe to the change detection event
   this.locationSubscription$ = this.service.locationChanged$?.subscribe(() => {
     // Perform actions when the location changes
@@ -207,15 +211,28 @@ if(this.CategoryId){
     this.selectedServiceCategoryId =  this.selectedServiceCategoryId? this.selectedServiceCategoryId:this.selectedServiceCategoryIdThroughLocationSearch;
   //  this.getFilterSubCategory(this.selectedServiceCategoryId);
   
+  this.createCanonicalLink()
 }
+
   }
 
+  createCanonicalLink() {
+    let canURL = 'https://www.firstfloppy.com/' + this.categorySeoUrl;
+    let link: HTMLLinkElement = this.dom.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    this.dom.head.appendChild(link);
+    link.setAttribute('href', canURL);
+  }
+  isLoading: boolean = true; 
   fetchItems(catId: any, subCatId: any, servicesName:any) {
+    this.isLoading = true;
     this.service.getItemByCategory(catId, subCatId, servicesName, this.latitude, this.longitude, this.startIndex, this.pageSize).subscribe((res) => {
       if (res.success) {
+        this.isLoading = false;
         this.servicesDetails = res.data.items.map((itemWrapper:any) => ({
           ...itemWrapper.item, reviews: itemWrapper.reviews, vender:itemWrapper.vendor})); // Correctly map to items
-        this.totalItems = res.data.totalItems; // Correctly set the total items from the response
+          this.totalItems = res.data.totalItems; // Correctly set the total items from the response
+          console.log('itemWrapper', this.servicesDetails, this.servicesDetails[0]);
   
         if (this.servicesDetails.length > 0) {
           this.vendorName = this.servicesDetails[0]; // Extract vendor name from the first item
@@ -233,11 +250,11 @@ this.service.getSubCategoryBySpecificationName(id).subscribe((res) => {
   this.categories = res.data;
   if (this.categories && this.categories.length > 0) {
     // Attempt to find the category by name
-    if(!this.myState){
-    const matchedCategory = this.categories.filter(
-      (category) => category.serviceName.toLowerCase() === this.subCategoryName?.toLowerCase()
-    );
-  }
+  //   if(!this.myState){
+  //   const matchedCategory = this.categories.filter(
+  //     (category) => category?.serviceName?.toLowerCase() === this.subCategoryName?.toLowerCase()
+  //   );
+  // }
      // Run your logic here based on the state
      if (this.myState) {
       // Your code to run when myState is true
@@ -391,6 +408,11 @@ if( localStorage.getItem('serviceName')){
   }
 
   onPageChange(event: PageEvent): void {
+    if(this.isBrowser){
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scrolling to top
+      }, 100);
+    }
     this.pageIndex = event.pageIndex;  // Update current page index
     this.pageSize = event.pageSize;  // Update page size
     this.startIndex = this.pageIndex * this.pageSize;  // Calculate new startIndex
@@ -616,5 +638,11 @@ getFormattedPrice(price:any): string {
   return price.replace(/(\d+)/, '₹$1');
 }
 
+get isMobile(): boolean {
+  if (this.isBrowser) {
+    return window.innerWidth < 768;
+  }
+  return false; // Default return statement
 }
 
+}

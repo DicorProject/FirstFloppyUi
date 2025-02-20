@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServicesDetailService } from '../../service/services-detail.service';
 import { environment } from '../../../../../environments/environment.development';
-import { ViewportScroller } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-services',
@@ -13,13 +13,17 @@ export class ServicesComponent implements OnInit {
   serviceDataList:any[]=[];
   originalList:any[]=[];
   apiUrl: string = environment.ApiBaseUrl;
-  subSategories:any
-
+  subSategories:any;
+  isBrowser!: boolean;
   constructor(
     private router: Router,
     private service:ServicesDetailService,
-    private viewportScroller: ViewportScroller
-  ){}
+    private viewportScroller: ViewportScroller,
+    @Inject(DOCUMENT) private dom:any,
+    @Inject(PLATFORM_ID) platformId: Object
+  ){
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 ngOnInit(){
   this.viewportScroller.scrollToPosition([0, 0]); // Scroll to the top of the page
    // ServiceCategoryList
@@ -28,6 +32,18 @@ ngOnInit(){
     this.originalList = [...res?.data];
       this.serviceDataList = this.serviceDataList?.filter((iterable:any)=> iterable?.status === 1);
    })
+if(this.isBrowser){
+   this.createCanonicalLink()
+}
+}
+
+createCanonicalLink() {
+  let canURL = 'https://www.firstfloppy.com/services';
+  let link: HTMLLinkElement = this.dom.createElement('link');
+  link.setAttribute('rel', 'canonical');
+  this.dom.head.appendChild(link);
+  link.setAttribute('href', canURL);
+  console.log("184")
 }
 
   goToCategory(card: any) {

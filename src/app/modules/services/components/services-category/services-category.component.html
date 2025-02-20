@@ -1,6 +1,7 @@
 <app-page-breadcrumb></app-page-breadcrumb>
 <!--  -->
 <div class="container p-2">
+  <div *ngIf="!isMobile">
   <button
     (click)="showFilter = true"
     *ngIf="!showFilter"
@@ -9,6 +10,25 @@
   >
     Show Filters
   </button>
+</div>
+  <div *ngIf="isMobile" style="display: flex;
+      justify-content: space-between;
+      height: 2.5rem;">
+    <button
+      (click)="showFilter = true"
+      *ngIf="!showFilter"
+      class="btn show-filter-btn fw-bold d-block d-sm-none"
+      style="color: #008cac; border: 1px solid #008cac"
+    >
+      Show Filters
+    </button>
+      <div class="example-button-row">
+              <!-- <button mat-raised-button>Basic</button> -->
+              <a mat-raised-button (click)="navigateToServiceRate()"
+                >Spare part rate</a
+              >
+            </div>
+  </div>
   <div class="row gapCard">
     <div
       class="col-sm-3 me-5 position-relative d-sm-block"
@@ -55,7 +75,7 @@
 
     <div class="col-sm-8 card_backgroundImg pt-5">
       <div class="row">
-        <section>
+        <section *ngIf="!isMobile">
           <div class="example-button-row">
             <!-- <button mat-raised-button>Basic</button> -->
             <a mat-raised-button (click)="navigateToServiceRate()"
@@ -64,6 +84,8 @@
           </div>
         </section>
         <!-- GridContainer -->
+        <div *ngIf="isLoading; else showData"></div>
+        <ng-template #showData>
         @if(servicesDetails.length){
         <div class="grid-container">
              <div
@@ -78,7 +100,7 @@
                   class="img-fluid"
                 />
                 <h6 class="text-start fw-bold pt-3 vender-name">
-                  {{ card?.vendorname }}
+                  {{ card?.vender?.vendorName }}
                 </h6>
                 <!-- <div class="Staff">
                 SubGroupName <span>{{ card.item.subgroupname }}</span>
@@ -106,8 +128,9 @@
          
         </div>
       }@else {
-        <div class="no-service">No Service Available</div>
+        <div class="no-service">No Service Found</div>
       }
+    </ng-template>
         <!-- ContainerGridClosed -->
       </div>
     </div>
